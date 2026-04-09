@@ -2,18 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
   <title>The Home Battle: Buyer Beware</title>
   <style>
     :root {
       --bg: #111827;
-      --panel: rgba(0, 0, 0, 0.35);
-      --border: rgba(255, 255, 255, 0.18);
+      --panel: rgba(0,0,0,0.65);
       --text: #f8fafc;
-      --accent: #f59e0b;
+      --accent: #ffd166;
     }
 
     html, body {
@@ -22,9 +18,9 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: var(--bg);
-      touch-action: none;
+      background: #111827;
       font-family: Arial, Helvetica, sans-serif;
+      touch-action: none;
       color: var(--text);
     }
 
@@ -41,7 +37,7 @@
       height: 100vh;
       height: 100dvh;
       overflow: hidden;
-      background: linear-gradient(to bottom, #78c4ff 0%, #d7f0ff 60%, #d4f7d2 100%);
+      background: #111827;
     }
 
     canvas {
@@ -53,81 +49,98 @@
       touch-action: none;
     }
 
-    #boot-overlay {
+    .overlay {
       position: fixed;
       inset: 0;
-      z-index: 20;
+      z-index: 50;
       display: flex;
       align-items: center;
       justify-content: center;
-      pointer-events: none;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.45));
+      background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.72));
+      padding: 20px;
+      box-sizing: border-box;
     }
 
-    #boot-card {
-      width: min(88vw, 520px);
+    .card {
+      width: min(88vw, 620px);
       background: var(--panel);
-      border: 2px solid var(--border);
+      border: 2px solid rgba(255,255,255,0.18);
       border-radius: 18px;
-      padding: 20px 18px;
+      padding: 22px 20px;
       text-align: center;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.35);
       backdrop-filter: blur(8px);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
     }
 
-    #boot-card h1 {
-      margin: 0 0 10px;
-      font-size: clamp(24px, 5vw, 40px);
+    .card h1 {
+      margin: 0 0 12px;
+      font-size: clamp(26px, 5vw, 42px);
       line-height: 1.05;
     }
 
-    #boot-card p {
+    .card p {
       margin: 8px 0;
-      font-size: clamp(14px, 2.8vw, 18px);
-      opacity: 0.96;
+      font-size: clamp(14px, 2.7vw, 18px);
     }
 
-    #boot-card .accent {
+    .accent {
       color: var(--accent);
       font-weight: 700;
     }
 
-    #boot-tip {
-      margin-top: 12px;
-      font-size: clamp(13px, 2.5vw, 16px);
-      opacity: 0.88;
-    }
+    #rotate-overlay { display: none; }
+    #boot-tip { opacity: 0.9; }
 
-    @media (orientation: landscape) {
-      #boot-card {
-        width: min(70vw, 640px);
-      }
+    @media (orientation: portrait) {
+      #rotate-overlay { display: flex; }
     }
   </style>
 </head>
 <body>
   <div id="game-container"></div>
 
-  <div id="boot-overlay">
-    <div id="boot-card">
-      <h1>The Home Battle:<br />Buyer Beware</h1>
-      <p><span class="accent">Touch controls are built in.</span></p>
+  <div id="boot-overlay" class="overlay">
+    <div class="card">
+      <h1>The Home Battle:<br>Buyer Beware</h1>
+      <p><span class="accent">Mobile-first touch controls are built in.</span></p>
       <p>Left thumb = analog movement</p>
       <p>Right thumb = Jump / Shoot / Change Gun / Call Agent</p>
-      <p id="boot-tip">Tap anywhere to begin. The game will try to enter fullscreen on your first touch.</p>
+      <p id="boot-tip">Tap anywhere to start. For the best experience, rotate your phone sideways.</p>
+    </div>
+  </div>
+
+  <div id="rotate-overlay" class="overlay">
+    <div class="card">
+      <h1>Rotate Device</h1>
+      <p>Play this one in <span class="accent">landscape</span>.</p>
+      <p>Turn your phone sideways to continue.</p>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js"></script>
   <script type="module" src="./main.js"></script>
-
   <script>
     const bootOverlay = document.getElementById('boot-overlay');
-    const dismissOverlay = () => {
+    const rotateOverlay = document.getElementById('rotate-overlay');
+
+    function dismissBoot() {
       if (bootOverlay) bootOverlay.style.display = 'none';
-      window.removeEventListener('pointerdown', dismissOverlay);
-    };
-    window.addEventListener('pointerdown', dismissOverlay, { once: true });
+      window.removeEventListener('pointerdown', dismissBoot);
+    }
+    window.addEventListener('pointerdown', dismissBoot, { once: true });
+
+    function isPortrait() {
+      return window.matchMedia('(orientation: portrait)').matches || window.innerHeight > window.innerWidth;
+    }
+
+    function updateRotationOverlay() {
+      rotateOverlay.style.display = isPortrait() ? 'flex' : 'none';
+      window.__forceLandscape = isPortrait();
+    }
+
+    updateRotationOverlay();
+    window.addEventListener('resize', updateRotationOverlay);
+    window.addEventListener('orientationchange', updateRotationOverlay);
   </script>
 </body>
 </html>

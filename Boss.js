@@ -1,7 +1,6 @@
 export default class Boss extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, 'boss');
-
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
@@ -16,8 +15,6 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
 
     this.maxHp = 1800;
     this.hp = this.maxHp;
-
-    this.contactDamageCooldown = false;
     this.lastRoar = 0;
     this.phase = 1;
     this.baseSpeed = 90;
@@ -53,12 +50,8 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
 
     if (!georgeActive) {
       effective = Math.max(1, Math.floor(amount * 0.1));
-    } else {
-      if (fromGeorge) {
-        effective = Math.floor(amount * 1.6);
-      } else {
-        effective = amount;
-      }
+    } else if (fromGeorge) {
+      effective = Math.floor(amount * 1.6);
     }
 
     this.hp = Math.max(0, this.hp - effective);

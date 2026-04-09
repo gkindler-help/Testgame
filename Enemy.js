@@ -2,7 +2,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, type = 'listing') {
     const texture = type === 'listing' ? 'enemy-basic' : 'enemy-small';
     super(scene, x, y, texture);
-
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
@@ -19,24 +18,11 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     switch (type) {
       case 'listing':
-        this.hp = 55;
-        this.speed = 110;
-        this.range = 360;
-        this.fireRate = 1800;
-        break;
+        this.hp = 55; this.speed = 110; this.range = 360; this.fireRate = 1800; break;
       case 'goblin':
-        this.hp = 34;
-        this.speed = 90;
-        this.range = 420;
-        this.fireRate = 1400;
-        break;
-      case 'gremlin':
+        this.hp = 34; this.speed = 90; this.range = 420; this.fireRate = 1400; break;
       default:
-        this.hp = 28;
-        this.speed = 135;
-        this.range = 250;
-        this.fireRate = 2200;
-        break;
+        this.hp = 28; this.speed = 135; this.range = 250; this.fireRate = 2200; break;
     }
 
     this.body.setSize(26, 54);
@@ -60,11 +46,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       if (this.type === 'listing') {
         this.setVelocityX(dir * this.speed);
       } else if (this.type === 'goblin') {
-        if (dist > 180) {
-          this.setVelocityX(dir * this.speed);
-        } else {
-          this.setVelocityX(0);
-        }
+        if (dist > 180) this.setVelocityX(dir * this.speed);
+        else this.setVelocityX(0);
       } else {
         this.setVelocityX(dir * this.speed);
         if (grounded && dist > 120 && dist < 220 && Phaser.Math.Between(0, 100) < 2) {
@@ -77,9 +60,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   }
 
   canShootAtPlayer(player, time) {
-    if (!this.active) return false;
-    if (this.type === 'listing') return false;
-
+    if (!this.active || this.type === 'listing') return false;
     const dist = Phaser.Math.Distance.Between(this.x, this.y, player.x, player.y);
     return dist < this.range && time >= this.lastShotTime + this.fireRate;
   }
@@ -90,7 +71,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   takeDamage(amount) {
     this.hp -= amount;
-
     this.scene.tweens.add({
       targets: this,
       alpha: 0.25,
@@ -98,9 +78,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
       yoyo: true,
       repeat: 1
     });
-
-    if (this.hp <= 0) {
-      this.destroy();
-    }
+    if (this.hp <= 0) this.destroy();
   }
 }

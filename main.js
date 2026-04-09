@@ -21,7 +21,7 @@ const config = {
   },
   scene: [GameScene],
   input: {
-    activePointers: 4
+    activePointers: 6
   }
 };
 
