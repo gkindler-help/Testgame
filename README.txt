@@ -11,3 +11,5 @@ Files included:
 - Boss.js
 - Enemy.js
 - scenes/GameScene.js
+
+Patched version: fixed boss collision setup order so scene initializes correctly.
