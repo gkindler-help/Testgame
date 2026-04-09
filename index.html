@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Super Homebuyer Quest</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <h1>Super Homebuyer Quest</h1>
+        <p class="subtitle">A playable real-estate platformer MVP</p>
+      </div>
+      <div class="topbar-actions">
+        <button id="restartBtn" class="btn secondary">Restart</button>
+        <button id="startBtn" class="btn">Start Game</button>
+      </div>
+    </header>
+
+    <section class="hud">
+      <div class="stat">
+        <span class="label">Level</span>
+        <span id="levelName">Pre-Approval Plains</span>
+      </div>
+      <div class="stat">
+        <span class="label">Budget</span>
+        <span id="budgetValue">100</span>
+      </div>
+      <div class="stat">
+        <span class="label">Stress</span>
+        <span id="stressValue">0</span>
+      </div>
+      <div class="stat">
+        <span class="label">Knowledge Coins</span>
+        <span id="coinsValue">0</span>
+      </div>
+      <div class="stat">
+        <span class="label">Lives</span>
+        <span id="livesValue">3</span>
+      </div>
+    </section>
+
+    <section class="bars">
+      <div class="bar-card">
+        <div class="bar-header">
+          <span>Budget</span>
+          <span id="budgetText">100 / 100</span>
+        </div>
+        <div class="bar"><div id="budgetBar" class="fill budget-fill"></div></div>
+      </div>
+      <div class="bar-card">
+        <div class="bar-header">
+          <span>Stress</span>
+          <span id="stressText">0 / 100</span>
+        </div>
+        <div class="bar"><div id="stressBar" class="fill stress-fill"></div></div>
+      </div>
+    </section>
+
+    <main class="game-layout">
+      <aside class="panel left-panel">
+        <h2>How to play</h2>
+        <ul>
+          <li>Move: <strong>Arrow keys</strong> or <strong>A / D</strong></li>
+          <li>Jump: <strong>Space</strong>, <strong>W</strong>, or <strong>↑</strong></li>
+          <li>Reach the sign at the end of each level</li>
+          <li>Collect coins and power-ups</li>
+          <li>Avoid hazards like bad flips, wire fraud, and inspection traps</li>
+        </ul>
+
+        <h3>Worlds</h3>
+        <ol class="world-list">
+          <li>Pre-Approval Plains</li>
+          <li>Showing Sprint</li>
+          <li>Inspection Dungeon</li>
+        </ol>
+      </aside>
+
+      <section class="game-panel">
+        <div id="gameWrapper" class="game-wrapper">
+          <canvas id="gameCanvas" width="1100" height="520" aria-label="Game canvas"></canvas>
+
+          <div id="overlay" class="overlay visible">
+            <div class="overlay-card">
+              <h2>Ready to buy without getting wrecked?</h2>
+              <p>
+                Collect smart choices. Avoid real-estate traps. Reach the closing sign
+                with enough budget and low enough stress to survive the deal.
+              </p>
+              <div class="overlay-buttons">
+                <button id="overlayStartBtn" class="btn">Play</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="toast" class="toast"></div>
+        </div>
+      </section>
+
+      <aside class="panel right-panel">
+        <h2>What items mean</h2>
+        <div class="legend-item"><span class="swatch coin"></span> Knowledge coin = smart move</div>
+        <div class="legend-item"><span class="swatch power"></span> Power-up = budget boost / stress drop</div>
+        <div class="legend-item"><span class="swatch hazard"></span> Hazard = bad decision or hidden issue</div>
+        <div class="legend-item"><span class="swatch finish"></span> Finish sign = close the deal</div>
+
+        <h3>Theme</h3>
+        <p>
+          This MVP is built so you can expand it into a bigger buyer journey later:
+          more levels, local jokes, side quests, lender NPCs, inspection mini-games,
+          and neighborhood-specific worlds.
+        </p>
+      </aside>
+    </main>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
