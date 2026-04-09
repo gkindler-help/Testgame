@@ -2,126 +2,132 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+  />
   <title>The Home Battle: Buyer Beware</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --bg: #111827;
+      --panel: rgba(0, 0, 0, 0.35);
+      --border: rgba(255, 255, 255, 0.18);
+      --text: #f8fafc;
+      --accent: #f59e0b;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      touch-action: none;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+    }
+
+    body {
+      position: fixed;
+      inset: 0;
+    }
+
+    #game-container {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      width: 100dvw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #78c4ff 0%, #d7f0ff 60%, #d4f7d2 100%);
+    }
+
+    canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      touch-action: none;
+    }
+
+    #boot-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.45));
+    }
+
+    #boot-card {
+      width: min(88vw, 520px);
+      background: var(--panel);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 20px 18px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+    }
+
+    #boot-card h1 {
+      margin: 0 0 10px;
+      font-size: clamp(24px, 5vw, 40px);
+      line-height: 1.05;
+    }
+
+    #boot-card p {
+      margin: 8px 0;
+      font-size: clamp(14px, 2.8vw, 18px);
+      opacity: 0.96;
+    }
+
+    #boot-card .accent {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    #boot-tip {
+      margin-top: 12px;
+      font-size: clamp(13px, 2.5vw, 16px);
+      opacity: 0.88;
+    }
+
+    @media (orientation: landscape) {
+      #boot-card {
+        width: min(70vw, 640px);
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="shell">
-    <header class="topbar">
-      <div>
-        <h1>THE HOME BATTLE: BUYER BEWARE</h1>
-        <p class="subtitle">Arcade run-and-gun real estate survival game</p>
-      </div>
-      <div class="top-actions">
-        <button id="restartBtn" class="btn secondary">Restart Mission</button>
-        <button id="startBtn" class="btn">Start Mission</button>
-      </div>
-    </header>
+  <div id="game-container"></div>
 
-    <section class="hud-grid">
-      <div class="hud-card"><span class="label">Mission</span><span id="missionText">Showing District</span></div>
-      <div class="hud-card"><span class="label">Budget</span><span id="budgetTextValue">100</span></div>
-      <div class="hud-card"><span class="label">Stress</span><span id="stressTextValue">0</span></div>
-      <div class="hud-card"><span class="label">Lives</span><span id="livesTextValue">3</span></div>
-      <div class="hud-card"><span class="label">Agent Assist</span><span id="agentTextValue">Offline</span></div>
-      <div class="hud-card"><span class="label">Boss</span><span id="bossTextValue">Not deployed</span></div>
-    </section>
-
-    <section class="bars">
-      <div class="bar-card">
-        <div class="bar-meta">
-          <span>Budget Integrity</span>
-          <span id="budgetBarLabel">100 / 100</span>
-        </div>
-        <div class="bar"><div class="fill budget-fill" id="budgetBar"></div></div>
-      </div>
-      <div class="bar-card">
-        <div class="bar-meta">
-          <span>Stress Load</span>
-          <span id="stressBarLabel">0 / 100</span>
-        </div>
-        <div class="bar"><div class="fill stress-fill" id="stressBar"></div></div>
-      </div>
-      <div class="bar-card">
-        <div class="bar-meta">
-          <span>Boss Armor</span>
-          <span id="bossBarLabel">0 / 100</span>
-        </div>
-        <div class="bar"><div class="fill boss-fill" id="bossBar"></div></div>
-      </div>
-    </section>
-
-    <main class="layout">
-      <aside class="panel">
-        <h2>Controls</h2>
-        <ul>
-          <li><strong>Move</strong>: A / D or Left / Right</li>
-          <li><strong>Jump</strong>: W / ↑ / Space</li>
-          <li><strong>Shoot</strong>: J or F</li>
-          <li><strong>Restart</strong>: button above</li>
-        </ul>
-
-        <h3>Mission Brief</h3>
-        <p>
-          Push through the showing district, survive fake flips, overpriced listings,
-          appraisal drones, and wire fraud fire. Near the end, George drops in as a required
-          agent assist power-up. Without him, the final boss is basically unwinnable.
-        </p>
-      </aside>
-
-      <section class="game-panel">
-        <div class="canvas-wrap">
-          <canvas id="gameCanvas" width="1280" height="720"></canvas>
-
-          <div id="overlay" class="overlay visible">
-            <div class="overlay-card">
-              <div class="eyebrow">MISSION START</div>
-              <h2>THE HOME BATTLE: BUYER BEWARE</h2>
-              <p>
-                This is a fresh run-and-gun build inspired by arcade side-scrollers.
-                Fight your way through a chaotic housing market. George is the required
-                power-up. Get him, or the deal dies at the boss.
-              </p>
-              <div class="overlay-actions">
-                <button id="overlayStartBtn" class="btn">Deploy</button>
-              </div>
-            </div>
-          </div>
-
-          <div id="toast" class="toast"></div>
-
-          <div class="touch-controls" aria-label="Touch controls">
-            <div class="touch-left">
-              <button class="touch-btn" id="touchLeft">◀</button>
-              <button class="touch-btn" id="touchRight">▶</button>
-            </div>
-            <div class="touch-right">
-              <button class="touch-btn action" id="touchJump">⤒</button>
-              <button class="touch-btn action" id="touchShoot">●</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <aside class="panel">
-        <h2>Enemy Types</h2>
-        <ul>
-          <li><strong>Lipstick Flip</strong> — fast ground attacker</li>
-          <li><strong>Overpriced Listing</strong> — armored slow mover</li>
-          <li><strong>Appraisal Drone</strong> — flying ranged enemy</li>
-          <li><strong>Wire Fraud Orb</strong> — dangerous projectile barrage</li>
-        </ul>
-
-        <h3>Win Condition</h3>
-        <p>
-          Reach the final boss and destroy it. George activates late in the mission and unlocks
-          the only weapon mode that can actually crack the boss armor in time.
-        </p>
-      </aside>
-    </main>
+  <div id="boot-overlay">
+    <div id="boot-card">
+      <h1>The Home Battle:<br />Buyer Beware</h1>
+      <p><span class="accent">Touch controls are built in.</span></p>
+      <p>Left thumb = analog movement</p>
+      <p>Right thumb = Jump / Shoot / Change Gun / Call Agent</p>
+      <p id="boot-tip">Tap anywhere to begin. The game will try to enter fullscreen on your first touch.</p>
+    </div>
   </div>
 
-  <script src="game.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js"></script>
+  <script type="module" src="./main.js"></script>
+
+  <script>
+    const bootOverlay = document.getElementById('boot-overlay');
+    const dismissOverlay = () => {
+      if (bootOverlay) bootOverlay.style.display = 'none';
+      window.removeEventListener('pointerdown', dismissOverlay);
+    };
+    window.addEventListener('pointerdown', dismissOverlay, { once: true });
+  </script>
 </body>
 </html>
